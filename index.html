@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1a1a1a">
     <meta name="description" content="Tracke deinen Gym-Fortschritt">
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkd5bSBUcmFja2VyIiwKICAic2hvcnRfbmFtZSI6ICJHeW0iLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzFhMWExYSIsCiAgInRoZW1lX2NvbG9yIjogIiMxYTFhMWEiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWwsJTNDc3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgd2lkdGg9JzE5MicgaGVpZ2h0PScxOTInJTNFJTNDcmVjdCB3aWR0aD0nMTkyJyBoZWlnaHQ9JzE5MicgZmlsbD0nJTIzMWExYTFhJy8lM0UlM0N0ZXh0IHg9JzUwJTI1JyB5PSc1MCUyNScgZm9udC1zaXplPSc5MCcgdGV4dC1hbmNob3I9J21pZGRsZScgZHk9Jy4zZW0nIGZpbGw9JyUyMzZkMjhmZCclM0UlRjAlOUYlOEIlOEIlM0MvdGV4dCUzRSUzQy9zdmclM0UiLAogICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiCiAgICB9LAogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbCwlM0NzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB3aWR0aD0nNTEyJyBoZWlnaHQ9JzUxMiclM0UlM0NyZWN0IHdpZHRoPSc1MTInIGhlaWdodD0nNTEyJyBmaWxsPSclMjMxYTFhMWEnLyUzRSUzQ3RleHQgeD0nNTAlMjUnIHk9JzUwJTI1JyBmb250LXNpemU9JzI0MCcgdGV4dC1hbmNob3I9J21pZGRsZScgZHk9Jy4zZW0nIGZpbGw9JyUyMzZkMjhmZCclM0UlRjAlOUYlOEIlOEIlM0MvdGV4dCUzRSUzQy9zdmclM0UiLAogICAgICAic2l6ZXMiOiAiNTEyeDUxMiIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiCiAgICB9CiAgXQp9">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='64' height='64' fill='%231a1a1a'/%3E%3Ctext x='50%25' y='50%25' font-size='40' text-anchor='middle' dy='.3em' fill='%236d28fd'%3E💪%3C/text%3E%3C/svg%3E">
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Crect width='180' height='180' fill='%231a1a1a'/%3E%3Ctext x='50%25' y='50%25' font-size='90' text-anchor='middle' dy='.3em' fill='%236d28fd'%3E💪%3C/text%3E%3C/svg%3E">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Gym Tracker</title>
@@ -45,6 +46,7 @@
             color: var(--text-primary);
             min-height: 100vh;
             padding-bottom: 80px;
+            padding-top: 70px;
             transition: background 0.3s, color 0.3s;
         }
 
@@ -88,17 +90,39 @@
         }
 
         .theme-toggle {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 0.5rem;
+            background: linear-gradient(135deg, var(--bg-tertiary), rgba(109, 40, 253, 0.1));
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 0.6rem 0.8rem;
             cursor: pointer;
             font-size: 1.25rem;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-toggle::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(109, 40, 253, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
         }
 
         .theme-toggle:hover {
             border-color: var(--accent);
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(109, 40, 253, 0.2);
+        }
+
+        .theme-toggle:active::before {
+            width: 300px;
+            height: 300px;
         }
 
         .container {
@@ -115,13 +139,30 @@
         }
 
         .stat-card {
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(109, 40, 253, 0.05) 100%);
-            padding: 1.5rem;
-            border-radius: 16px;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(109, 40, 253, 0.08) 100%);
+            padding: 1.75rem;
+            border-radius: 20px;
             border: 2px solid var(--border);
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
             overflow: hidden;
+            animation: cardSlideUp 0.6s ease backwards;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0s; }
+        .stat-card:nth-child(2) { animation-delay: 0.1s; }
+        .stat-card:nth-child(3) { animation-delay: 0.2s; }
+        .stat-card:nth-child(4) { animation-delay: 0.3s; }
+
+        @keyframes cardSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .stat-card::before {
@@ -131,19 +172,32 @@
             right: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(109, 40, 253, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(109, 40, 253, 0.15) 0%, transparent 70%);
             opacity: 0;
             transition: opacity 0.4s;
         }
 
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
         .stat-card:hover {
-            transform: translateY(-8px) scale(1.02);
+            transform: translateY(-12px) scale(1.03);
             border-color: var(--accent);
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(109, 40, 253, 0.15) 100%);
-            box-shadow: 0 20px 40px rgba(109, 40, 253, 0.15);
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(109, 40, 253, 0.2) 100%);
+            box-shadow: 0 30px 60px rgba(109, 40, 253, 0.2);
         }
 
         .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card:hover::after {
             opacity: 1;
         }
 
@@ -154,19 +208,26 @@
         }
 
         .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
+            font-size: 2.2rem;
+            font-weight: 800;
             color: var(--accent);
-            background: linear-gradient(135deg, var(--accent), #8347ff);
+            background: linear-gradient(135deg, var(--accent), #8347ff, #a855f7);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: pulseGlow 2s ease-in-out infinite;
+            animation: pulseGlow 2.5s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(109, 40, 253, 0.3);
         }
 
         @keyframes pulseGlow {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
+            0%, 100% { 
+                opacity: 1;
+                filter: drop-shadow(0 0 8px rgba(109, 40, 253, 0.4));
+            }
+            50% { 
+                opacity: 0.9;
+                filter: drop-shadow(0 0 16px rgba(109, 40, 253, 0.6));
+            }
         }
 
         .stat-unit {
@@ -176,21 +237,36 @@
         }
 
         .card {
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(109, 40, 253, 0.03) 100%);
-            border-radius: 16px;
-            padding: 2rem;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(109, 40, 253, 0.05) 100%);
+            border-radius: 20px;
+            padding: 2.2rem;
             margin-bottom: 1.5rem;
-            border: 1px solid var(--border);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            transition: all 0.4s ease;
-            animation: slideUp 0.5s ease;
+            border: 2px solid var(--border);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: slideUp 0.6s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(109, 40, 253, 0.1) 0%, transparent 70%);
+            transform: translate(100px, -100px);
+            transition: all 0.4s;
+            pointer-events: none;
         }
 
         @keyframes slideUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
@@ -200,7 +276,12 @@
 
         .card:hover {
             border-color: var(--accent);
-            box-shadow: 0 12px 48px rgba(109, 40, 253, 0.2);
+            box-shadow: 0 20px 60px rgba(109, 40, 253, 0.25);
+            transform: translateY(-4px);
+        }
+
+        .card:hover::before {
+            transform: translate(50px, -50px);
         }
 
         .card-title {
@@ -226,21 +307,26 @@
 
         input, select {
             width: 100%;
-            padding: 0.875rem;
+            padding: 0.95rem;
             background: var(--bg-tertiary);
             border: 2px solid var(--border);
-            border-radius: 12px;
+            border-radius: 14px;
             color: var(--text-primary);
             font-size: 1rem;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+
+        input::placeholder, select::placeholder {
+            color: var(--text-secondary);
         }
 
         input:focus, select:focus {
             outline: none;
             border-color: var(--accent);
-            box-shadow: 0 0 20px rgba(109, 40, 253, 0.3);
-            transform: translateY(-2px);
-            background: linear-gradient(135deg, var(--bg-tertiary), rgba(109, 40, 253, 0.05));
+            box-shadow: 0 0 30px rgba(109, 40, 253, 0.35);
+            transform: translateY(-3px);
+            background: linear-gradient(135deg, var(--bg-tertiary), rgba(109, 40, 253, 0.08));
         }
 
         .input-group {
@@ -250,9 +336,9 @@
         }
 
         .btn {
-            padding: 0.875rem 1.5rem;
+            padding: 0.95rem 1.75rem;
             border: none;
-            border-radius: 10px;
+            border-radius: 14px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
@@ -262,19 +348,43 @@
             gap: 0.5rem;
             justify-content: center;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.15);
+            transition: left 0.5s;
+            z-index: 0;
+        }
+
+        .btn > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn:active {
-            transform: scale(0.95);
+            transform: scale(0.92);
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--accent), #8347ff);
+            background: linear-gradient(135deg, var(--accent), #8347ff, #a855f7);
             color: white;
             width: 100%;
             position: relative;
             overflow: hidden;
             transition: all 0.4s ease;
+            box-shadow: 0 8px 20px rgba(109, 40, 253, 0.3);
         }
 
         .btn-primary::before {
@@ -284,14 +394,22 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.2);
-            transition: left 0.4s;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s;
+            z-index: 1;
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, #8347ff, var(--accent));
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(109, 40, 253, 0.3);
+            background: linear-gradient(135deg, #8347ff, var(--accent), #a855f7);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(109, 40, 253, 0.4);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         .btn-primary:hover::before {
@@ -328,22 +446,68 @@
         .workout-list {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 1.1rem;
+            animation: listFadeIn 0.6s ease;
+        }
+
+        @keyframes listFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .workout-list .workout-item {
+            animation: itemSlideIn 0.4s ease backwards;
+        }
+
+        .workout-list .workout-item:nth-child(1) { animation-delay: 0s; }
+        .workout-list .workout-item:nth-child(2) { animation-delay: 0.08s; }
+        .workout-list .workout-item:nth-child(3) { animation-delay: 0.16s; }
+        .workout-list .workout-item:nth-child(4) { animation-delay: 0.24s; }
+        .workout-list .workout-item:nth-child(5) { animation-delay: 0.32s; }
+        .workout-list .workout-item:nth-child(n+6) { animation-delay: 0.4s; }
+
+        @keyframes itemSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .workout-item {
-            background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(109, 40, 253, 0.05) 100%);
-            border-radius: 12px;
-            padding: 1.25rem;
+            background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(109, 40, 253, 0.06) 100%);
+            border-radius: 16px;
+            padding: 1.4rem;
             border: 2px solid var(--border);
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            animation: fadeInScale 0.4s ease;
+            animation: fadeInScale 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .workout-item::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.05), transparent);
+            transition: top 0.5s;
+            pointer-events: none;
         }
 
         @keyframes fadeInScale {
             from {
                 opacity: 0;
-                transform: scale(0.95);
+                transform: scale(0.92);
             }
             to {
                 opacity: 1;
@@ -353,9 +517,13 @@
 
         .workout-item:hover {
             border-color: var(--accent);
-            transform: translateY(-4px);
-            box-shadow: 0 16px 32px rgba(109, 40, 253, 0.1);
-            background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(109, 40, 253, 0.1) 100%);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(109, 40, 253, 0.15);
+            background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(109, 40, 253, 0.12) 100%);
+        }
+
+        .workout-item:hover::before {
+            top: 0;
         }
 
         .workout-header {
@@ -406,31 +574,50 @@
         }
 
         .set-badge {
-            background: linear-gradient(135deg, var(--accent), #8347ff);
+            background: linear-gradient(135deg, var(--accent), #8347ff, #a855f7);
             color: white;
-            padding: 0.35rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(109, 40, 253, 0.3);
-            animation: badgeSlideIn 0.4s ease;
+            padding: 0.4rem 1.1rem;
+            border-radius: 25px;
+            font-size: 0.87rem;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 6px 20px rgba(109, 40, 253, 0.35);
+            animation: badgeSlideIn 0.5s ease backwards;
+            position: relative;
+            overflow: hidden;
         }
 
         @keyframes badgeSlideIn {
             from {
                 opacity: 0;
-                transform: translateX(-10px);
+                transform: translateX(-15px) scale(0.8);
             }
             to {
                 opacity: 1;
-                transform: translateX(0);
+                transform: translateX(0) scale(1);
             }
         }
 
+        .set-badge::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%);
+            opacity: 0;
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%); opacity: 0; }
+        }
+
         .set-badge:hover {
-            transform: scale(1.1) translateY(-2px);
-            box-shadow: 0 8px 20px rgba(109, 40, 253, 0.4);
+            transform: scale(1.12) translateY(-3px);
+            box-shadow: 0 12px 30px rgba(109, 40, 253, 0.5);
+            background: linear-gradient(135deg, #8347ff, var(--accent), #8347ff);
+            background-size: 200% 200%;
         }
 
         .nav-bar {
@@ -438,44 +625,60 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(180deg, rgba(36, 36, 36, 0.95) 0%, rgba(20, 20, 20, 0.99) 100%);
+            background: linear-gradient(180deg, rgba(36, 36, 36, 0.97) 0%, rgba(20, 20, 20, 0.99) 100%);
             border-top: 2px solid var(--border);
             display: flex;
             justify-content: space-around;
-            padding: 0.5rem;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+            padding: 0.6rem 0.5rem;
+            backdrop-filter: blur(25px);
+            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.3);
         }
 
         .nav-btn {
             background: none;
             border: none;
             color: var(--text-secondary);
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.2rem;
+            gap: 0.25rem;
             cursor: pointer;
-            padding: 0.5rem 0.8rem;
-            border-radius: 12px;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            padding: 0.6rem 1rem;
+            border-radius: 14px;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(109, 40, 253, 0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
         .nav-btn:hover {
-            transform: translateY(-4px);
+            transform: translateY(-6px);
+            color: var(--accent);
         }
 
         .nav-btn.active {
             color: var(--accent);
-            background: linear-gradient(135deg, rgba(109, 40, 253, 0.2), rgba(109, 40, 253, 0.05));
-            box-shadow: 0 8px 20px rgba(109, 40, 253, 0.2);
-            animation: navBtnActive 0.4s ease;
+            background: linear-gradient(135deg, rgba(109, 40, 253, 0.25), rgba(109, 40, 253, 0.08));
+            box-shadow: 0 12px 28px rgba(109, 40, 253, 0.25);
+            animation: navBtnActive 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .nav-btn.active::before {
+            opacity: 1;
         }
 
         @keyframes navBtnActive {
             0% {
-                transform: scale(0.8);
+                transform: scale(0.7);
                 opacity: 0;
             }
             100% {
@@ -485,18 +688,28 @@
         }
 
         .nav-icon {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
+            transition: transform 0.3s;
+        }
+
+        .nav-btn.active .nav-icon {
+            animation: iconBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes iconBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
         }
 
         .view {
             display: none;
-            animation: viewFadeIn 0.4s ease;
+            animation: viewFadeIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         @keyframes viewFadeIn {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(15px);
             }
             to {
                 opacity: 1;
@@ -517,47 +730,71 @@
 
         .color-option {
             aspect-ratio: 1;
-            border-radius: 16px;
-            border: 3px solid transparent;
+            border-radius: 18px;
+            border: 4px solid transparent;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            animation: colorOptionFade 0.5s ease backwards;
+        }
+
+        .color-option:nth-child(1) { animation-delay: 0s; }
+        .color-option:nth-child(2) { animation-delay: 0.05s; }
+        .color-option:nth-child(3) { animation-delay: 0.1s; }
+        .color-option:nth-child(4) { animation-delay: 0.15s; }
+        .color-option:nth-child(5) { animation-delay: 0.2s; }
+        .color-option:nth-child(6) { animation-delay: 0.25s; }
+        .color-option:nth-child(7) { animation-delay: 0.3s; }
+        .color-option:nth-child(8) { animation-delay: 0.35s; }
+
+        @keyframes colorOptionFade {
+            from {
+                opacity: 0;
+                transform: scale(0.6) rotate(-15deg);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
         }
 
         .color-option:hover {
-            transform: scale(1.15) translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            transform: scale(1.2) translateY(-6px) rotate(5deg);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
         }
 
         .color-option.selected {
             border-color: var(--text-primary);
-            box-shadow: 0 0 30px currentColor;
-            animation: colorSelect 0.4s ease;
+            box-shadow: 0 0 40px currentColor;
+            animation: colorSelect 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         @keyframes colorSelect {
             0% {
-                transform: scale(0.8);
+                transform: scale(0.7);
                 box-shadow: 0 0 0 currentColor;
+            }
+            50% {
+                transform: scale(1.1);
             }
             100% {
                 transform: scale(1);
-                box-shadow: 0 0 30px currentColor;
+                box-shadow: 0 0 40px currentColor;
             }
         }
 
         .empty-state {
             text-align: center;
-            padding: 3rem 1rem;
+            padding: 4rem 1.5rem;
             color: var(--text-secondary);
-            animation: fadeIn 0.5s ease;
+            animation: fadeIn 0.6s ease;
         }
 
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(20px);
             }
             to {
                 opacity: 1;
@@ -566,18 +803,20 @@
         }
 
         .empty-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            opacity: 0.6;
-            animation: float 3s ease-in-out infinite;
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.7;
+            animation: float 4s ease-in-out infinite;
         }
 
         @keyframes float {
             0%, 100% {
-                transform: translateY(0px);
+                transform: translateY(0px) scale(1);
+                filter: drop-shadow(0 5px 15px rgba(109, 40, 253, 0.1));
             }
             50% {
-                transform: translateY(-10px);
+                transform: translateY(-15px) scale(1.05);
+                filter: drop-shadow(0 15px 30px rgba(109, 40, 253, 0.2));
             }
         }
 
@@ -647,22 +886,32 @@
             position: fixed;
             bottom: 80px;
             right: 1rem;
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(109, 40, 253, 0.1) 100%);
-            border: 2px solid var(--accent);
-            border-radius: 20px;
-            padding: 1.5rem;
-            box-shadow: 0 20px 60px rgba(109, 40, 253, 0.3);
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(109, 40, 253, 0.15) 100%);
+            border: 3px solid var(--accent);
+            border-radius: 24px;
+            padding: 1.8rem;
+            box-shadow: 0 30px 80px rgba(109, 40, 253, 0.35);
             display: none;
             z-index: 99;
-            min-width: 200px;
-            backdrop-filter: blur(20px);
-            animation: slideInTimer 0.4s ease;
+            min-width: 220px;
+            backdrop-filter: blur(25px);
+            animation: slideInTimer 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timer-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.05) 50%, transparent 70%);
+            pointer-events: none;
         }
 
         @keyframes slideInTimer {
             from {
                 opacity: 0;
-                transform: translateY(20px) scale(0.8);
+                transform: translateY(30px) scale(0.7);
             }
             to {
                 opacity: 1;
@@ -675,21 +924,29 @@
         }
 
         .timer-display {
-            font-size: 3rem;
-            font-weight: 700;
+            font-size: 3.2rem;
+            font-weight: 800;
             text-align: center;
             color: var(--accent);
             font-variant-numeric: tabular-nums;
-            background: linear-gradient(135deg, var(--accent), #8347ff);
+            background: linear-gradient(135deg, var(--accent), #8347ff, #a855f7);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: timerPulse 1s ease-in-out infinite;
+            animation: timerPulse 0.8s ease-in-out infinite;
+            text-shadow: 0 0 40px rgba(109, 40, 253, 0.5);
+            letter-spacing: 2px;
         }
 
         @keyframes timerPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            0%, 100% { 
+                transform: scale(1);
+                filter: drop-shadow(0 0 10px rgba(109, 40, 253, 0.4));
+            }
+            50% { 
+                transform: scale(1.08);
+                filter: drop-shadow(0 0 20px rgba(109, 40, 253, 0.6));
+            }
         }
 
         .timer-label {
@@ -738,8 +995,24 @@
 
         .chart-container {
             position: relative;
-            height: 300px;
-            margin-top: 1rem;
+            height: 320px;
+            margin-top: 1.5rem;
+            border-radius: 16px;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(109, 40, 253, 0.05), transparent);
+            padding: 1rem;
+            animation: chartFadeIn 0.6s ease;
+        }
+
+        @keyframes chartFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .chart-filter {
@@ -844,47 +1117,65 @@
         }
 
         .timer-option {
-            padding: 0.875rem;
+            padding: 1rem;
             background: var(--bg-tertiary);
             border: 2px solid var(--border);
-            border-radius: 12px;
+            border-radius: 14px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timer-option::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
         }
 
         .timer-option:hover {
             border-color: var(--accent);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(109, 40, 253, 0.2);
+            transform: translateY(-6px) scale(1.05);
+            box-shadow: 0 12px 32px rgba(109, 40, 253, 0.25);
         }
 
         .timer-option.selected {
             border-color: var(--accent);
-            background: linear-gradient(135deg, rgba(109, 40, 253, 0.2), rgba(109, 40, 253, 0.05));
-            box-shadow: 0 8px 20px rgba(109, 40, 253, 0.3);
-            animation: timerOptionActive 0.4s ease;
+            background: linear-gradient(135deg, rgba(109, 40, 253, 0.25), rgba(109, 40, 253, 0.08));
+            box-shadow: 0 12px 32px rgba(109, 40, 253, 0.35);
+            animation: timerOptionActive 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .timer-option.selected::before {
+            opacity: 1;
         }
 
         @keyframes timerOptionActive {
             0% {
-                transform: scale(0.8);
+                transform: scale(0.7) rotateY(-10deg);
             }
             100% {
-                transform: scale(1);
+                transform: scale(1) rotateY(0deg);
             }
         }
 
         .timer-option span {
             display: block;
-            font-size: 1.35rem;
-            font-weight: 700;
+            font-size: 1.5rem;
+            font-weight: 800;
             color: var(--accent);
+            margin-bottom: 0.3rem;
         }
 
         .timer-option small {
             color: var(--text-secondary);
-            font-size: 0.75rem;
+            font-size: 0.8rem;
+            font-weight: 500;
         }
 
         .last-weight-hint {
@@ -920,23 +1211,41 @@
         }
 
         .install-prompt {
-            background: linear-gradient(135deg, var(--accent), #8347ff);
+            background: linear-gradient(135deg, var(--accent), #8347ff, #a855f7);
             color: white;
-            padding: 1.25rem;
-            border-radius: 16px;
+            padding: 1.4rem;
+            border-radius: 18px;
             margin-bottom: 1rem;
             display: none;
             align-items: center;
-            gap: 1rem;
-            box-shadow: 0 12px 32px rgba(109, 40, 253, 0.3);
-            animation: promptSlideIn 0.4s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            gap: 1.2rem;
+            box-shadow: 0 16px 40px rgba(109, 40, 253, 0.35);
+            animation: promptSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .install-prompt::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            opacity: 0;
+            animation: shimmerPrompt 3s infinite;
+        }
+
+        @keyframes shimmerPrompt {
+            0% { transform: translateX(-100%); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%); opacity: 0; }
         }
 
         @keyframes promptSlideIn {
             from {
                 opacity: 0;
-                transform: translateY(-20px);
+                transform: translateY(-25px);
             }
             to {
                 opacity: 1;
@@ -951,26 +1260,402 @@
         .install-prompt button {
             background: white;
             color: var(--accent);
-            padding: 0.6rem 1.2rem;
+            padding: 0.7rem 1.4rem;
             border: none;
-            border-radius: 10px;
-            font-weight: 600;
+            border-radius: 12px;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+            position: relative;
+            z-index: 1;
         }
 
         .install-prompt button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .install-prompt button:active {
+            transform: scale(0.95);
+        }
+
+        /* ===== NEW FEATURES STYLES ===== */
+        .quick-actions {
+            display: flex;
+            gap: 0.6rem;
+            margin-bottom: 1.5rem;
+            animation: quickActionsSlide 0.6s ease;
+            overflow-x: auto;
+            padding: 0 0.25rem;
+            scroll-behavior: smooth;
+        }
+
+        .quick-actions::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .quick-actions::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .quick-actions::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        @keyframes quickActionsSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .quick-action-btn {
+            background: linear-gradient(135deg, var(--accent), #8347ff);
+            border: 2px solid transparent;
+            border-radius: 16px;
+            padding: 0.75rem 1.25rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+            box-shadow: 0 6px 20px rgba(109, 40, 253, 0.3);
+            font-weight: 600;
+        }
+
+        .quick-action-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .quick-action-btn:hover {
+            transform: translateY(-6px) scale(1.08);
+            box-shadow: 0 12px 40px rgba(109, 40, 253, 0.4);
+            background: linear-gradient(135deg, #8347ff, var(--accent));
+        }
+
+        .quick-action-btn:hover::before {
+            opacity: 1;
+        }
+
+        .quick-action-btn:active {
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        .quick-action-icon {
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .quick-action-btn:hover .quick-action-icon {
+            animation: iconBounceQuick 0.5s ease;
+        }
+
+        @keyframes iconBounceQuick {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .quick-action-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 0.5px;
+        }
+
+        .streak-badge {
+            background: linear-gradient(135deg, #f59e0b, #f97316);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+            animation: streakPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes streakPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .streak-icon {
+            font-size: 1.5rem;
+        }
+
+        .streak-info {
+            flex: 1;
+        }
+
+        .streak-count {
+            font-size: 1.2rem;
+        }
+
+        .streak-text {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        .pr-badge {
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+            color: white;
+            padding: 0.6rem 1rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-left: 0.5rem;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .achievement {
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 0.75rem;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .achievement.unlocked {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(16, 185, 129, 0.2));
+            border-color: var(--success);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+            animation: achievementUnlock 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes achievementUnlock {
+            0% {
+                transform: scale(0.5) rotateZ(-10deg);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1) rotateZ(0deg);
+                opacity: 1;
+            }
+        }
+
+        .achievement:hover {
+            transform: translateY(-4px) scale(1.05);
+        }
+
+        .achievement-icon {
+            font-size: 2rem;
+            margin-bottom: 0.3rem;
+            transition: all 0.3s;
+        }
+
+        .achievement:hover .achievement-icon {
+            animation: achievementFloat 0.4s ease;
+        }
+
+        @keyframes achievementFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .achievement-name {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .achievement.unlocked .achievement-name {
+            color: var(--accent);
+        }
+
+        .template-item {
+            background: linear-gradient(135deg, var(--bg-tertiary), rgba(109, 40, 253, 0.05));
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .template-item:hover {
+            border-color: var(--accent);
+            box-shadow: 0 8px 20px rgba(109, 40, 253, 0.15);
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .template-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .template-info {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .template-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .template-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .template-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(109, 40, 253, 0.3);
+        }
+
+        .pr-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .pr-item {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.05));
+            border-left: 4px solid var(--success);
+            padding: 1rem;
+            border-radius: 8px;
+            animation: prItemSlide 0.4s ease backwards;
+        }
+
+        .pr-item:nth-child(1) { animation-delay: 0s; }
+        .pr-item:nth-child(2) { animation-delay: 0.1s; }
+        .pr-item:nth-child(3) { animation-delay: 0.2s; }
+
+        @keyframes prItemSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .pr-name {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .pr-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .pr-weight {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* ===== APPLE-STYLE TOP NAVBAR ===== */
+        .top-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(180deg, rgba(26, 26, 26, 0.98) 0%, rgba(26, 26, 26, 0.95) 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            z-index: 200;
+            padding: 0.8rem 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(109, 40, 253, 0.3)); }
+            50% { filter: drop-shadow(0 0 15px rgba(109, 40, 253, 0.5)); }
+        }
+
+        .theme-toggle-navbar {
+            background: linear-gradient(135deg, var(--bg-tertiary), rgba(109, 40, 253, 0.1));
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.5rem 0.7rem;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-toggle-navbar:hover {
+            border-color: var(--accent);
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(109, 40, 253, 0.2);
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Gym Tracker</h1>
-        <div class="header-actions">
-            <button class="theme-toggle" onclick="toggleTheme()" title="Theme wechseln">🌙</button>
+    <!-- Apple-Style Top Navbar -->
+    <div class="top-navbar">
+        <div class="navbar-content">
+            <div class="navbar-title">💪 Gym Tracker</div>
+            <button class="theme-toggle-navbar" onclick="toggleTheme()" title="Theme wechseln">🌙</button>
         </div>
     </div>
 
@@ -996,9 +1681,37 @@
         </div>
     </div>
 
-    <div class="container">
+    <div class="container" style="padding-top: 0;">
+        <!-- Quick Actions Bar -->
+        <div class="quick-actions" style="margin-top: 1rem;">
+            <button class="quick-action-btn" onclick="quickRepeatWorkout()" title="Letztes Workout wiederholen">
+                <div class="quick-action-icon">⚡</div>
+                <div class="quick-action-label">Quick Repeat</div>
+            </button>
+            <button class="quick-action-btn" onclick="switchView('prview', null)" title="Persönliche Rekorde">
+                <div class="quick-action-icon">🏆</div>
+                <div class="quick-action-label">My PRs</div>
+            </button>
+            <button class="quick-action-btn" onclick="switchView('templates', null)" title="Workout Vorlagen">
+                <div class="quick-action-icon">📋</div>
+                <div class="quick-action-label">Templates</div>
+            </button>
+            <button class="quick-action-btn" onclick="switchView('achievements', null)" title="Erfolge">
+                <div class="quick-action-icon">🎖️</div>
+                <div class="quick-action-label">Achievements</div>
+            </button>
+        </div>
         <!-- Home View -->
         <div id="homeView" class="view active">
+            <!-- Streak Badge -->
+            <div class="streak-badge" id="streakBadge" style="display: none;">
+                <div class="streak-icon">🔥</div>
+                <div class="streak-info">
+                    <div class="streak-count"><span id="streakCount">0</span> Tage</div>
+                    <div class="streak-text">Trainings-Streak</div>
+                </div>
+            </div>
+
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-label">Übungen</div>
@@ -1090,6 +1803,31 @@
                     </select>
                 </div>
                 <div id="allWorkouts" class="workout-list"></div>
+            </div>
+        </div>
+
+        <!-- Personal Records View -->
+        <div id="prview" class="view">
+            <div class="card">
+                <div class="card-title">🏆 Meine persönlichen Rekorde</div>
+                <div id="prContainer" class="pr-list"></div>
+            </div>
+        </div>
+
+        <!-- Workout Templates View -->
+        <div id="templates" class="view">
+            <div class="card">
+                <div class="card-title">📋 Workout Templates</div>
+                <button class="btn btn-primary" onclick="saveCurrentAsTemplate()" style="margin-bottom: 1rem;">+ Template speichern</button>
+                <div id="templatesContainer"></div>
+            </div>
+        </div>
+
+        <!-- Achievements View -->
+        <div id="achievements" class="view">
+            <div class="card">
+                <div class="card-title">🎖️ Meine Erfolge</div>
+                <div id="achievementsContainer" class="achievements-grid"></div>
             </div>
         </div>
 
@@ -1215,7 +1953,6 @@
     </nav>
 
     <script>
-        // ==================== Global State ====================
         let workouts = [];
         let deferredPrompt;
         let db = null;
@@ -1231,7 +1968,6 @@
             accentColor: '#6d28fd'
         };
 
-        // ==================== IndexedDB ====================
         const DB_NAME = 'GymTrackerDB';
         const DB_VERSION = 1;
         const STORE_NAME = 'workouts';
@@ -1346,7 +2082,10 @@
         function applySettings() {
             document.documentElement.classList.toggle('light-mode', !settings.darkMode);
             document.getElementById('darkModeToggle').checked = settings.darkMode;
-            document.querySelector('.theme-toggle').textContent = settings.darkMode ? '🌙' : '☀️';
+            const themeToggle = document.querySelector('.theme-toggle-navbar');
+            if (themeToggle) {
+                themeToggle.textContent = settings.darkMode ? '🌙' : '☀️';
+            }
             document.getElementById('autoTimerToggle').checked = settings.autoTimer;
             timerSeconds = settings.timerDuration;
             document.querySelectorAll('.timer-option').forEach(opt => {
@@ -1361,7 +2100,10 @@
         function toggleTheme() {
             settings.darkMode = !settings.darkMode;
             document.documentElement.classList.toggle('light-mode', !settings.darkMode);
-            document.querySelector('.theme-toggle').textContent = settings.darkMode ? '🌙' : '☀️';
+            const themeToggle = document.querySelector('.theme-toggle-navbar');
+            if (themeToggle) {
+                themeToggle.textContent = settings.darkMode ? '🌙' : '☀️';
+            }
             document.getElementById('darkModeToggle').checked = settings.darkMode;
             localStorage.setItem('gymSettings', JSON.stringify(settings));
             if (volumeChart) updateVolumeChart();
@@ -1377,8 +2119,13 @@
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             
-            document.getElementById(view + 'View').classList.add('active');
-            if (btn) btn.classList.add('active');
+            const viewEl = document.getElementById(view + 'View');
+            if (viewEl) {
+                viewEl.classList.add('active');
+            }
+            if (btn && btn.classList) {
+                btn.classList.add('active');
+            }
             
             if (view === 'history') renderAllWorkouts();
             if (view === 'stats') {
@@ -1386,6 +2133,9 @@
                 updateExerciseFilter();
             }
             if (view === 'add') updateExerciseDatalist();
+            if (view === 'prview') renderPRs();
+            if (view === 'templates') renderTemplates();
+            if (view === 'achievements') renderAchievements();
         }
 
         // ==================== Sets Management ====================
@@ -1521,7 +2271,242 @@
             switchView('home', document.querySelector('.nav-btn'));
         });
 
-        // ==================== UI Updates ====================
+        // ==================== NEW FEATURES: PRs, Streak, Templates, Achievements ====================
+        let templates = [];
+        let personalRecords = {};
+        let achievements = {
+            first_workout: { name: 'First Step', icon: '👣', unlocked: false },
+            ten_workouts: { name: '10 Runden', icon: '🔟', unlocked: false },
+            fifty_workouts: { name: 'Fünfzig', icon: '5️⃣0️⃣', unlocked: false },
+            hundred_workouts: { name: 'Hunder Stark', icon: '💯', unlocked: false },
+            ten_day_streak: { name: '10er Streak', icon: '🔥', unlocked: false },
+            thirty_day_streak: { name: '30er Beast', icon: '🐲', unlocked: false },
+            total_volume_1000: { name: '1000kg', icon: '⚖️', unlocked: false },
+            total_volume_5000: { name: '5000kg+', icon: '🏋️', unlocked: false }
+        };
+
+        function loadNewFeatures() {
+            const saved = localStorage.getItem('gymTemplates');
+            if (saved) templates = JSON.parse(saved);
+            
+            const savedPRs = localStorage.getItem('gymPRs');
+            if (savedPRs) personalRecords = JSON.parse(savedPRs);
+            
+            const savedAch = localStorage.getItem('gymAchievements');
+            if (savedAch) achievements = JSON.parse(savedAch);
+        }
+
+        function calculateStreak() {
+            if (workouts.length === 0) return 0;
+            
+            let streak = 0;
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            const sortedWorkouts = [...workouts].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            let currentDate = new Date(today);
+            for (const workout of sortedWorkouts) {
+                const workoutDate = new Date(workout.date);
+                workoutDate.setHours(0, 0, 0, 0);
+                
+                if (workoutDate.getTime() === currentDate.getTime()) {
+                    streak++;
+                    currentDate.setDate(currentDate.getDate() - 1);
+                } else if (workoutDate.getTime() < currentDate.getTime()) {
+                    break;
+                }
+            }
+            return streak;
+        }
+
+        function updateStreakBadge() {
+            const streak = calculateStreak();
+            const badge = document.getElementById('streakBadge');
+            
+            if (streak > 0) {
+                badge.style.display = 'flex';
+                document.getElementById('streakCount').textContent = streak;
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function updatePersonalRecords() {
+            const newPRs = {};
+            
+            workouts.forEach(w => {
+                if (w.sets && w.sets.length > 0) {
+                    const maxWeight = Math.max(...w.sets.map(s => s.weight));
+                    if (!newPRs[w.name] || maxWeight > newPRs[w.name].weight) {
+                        newPRs[w.name] = {
+                            weight: maxWeight,
+                            date: w.date,
+                            reps: w.sets.find(s => s.weight === maxWeight).reps
+                        };
+                    }
+                }
+            });
+            
+            personalRecords = newPRs;
+            localStorage.setItem('gymPRs', JSON.stringify(personalRecords));
+            renderPRs();
+        }
+
+        function renderPRs() {
+            const container = document.getElementById('prContainer');
+            const prs = Object.entries(personalRecords)
+                .map(([name, pr]) => ({ name, ...pr }))
+                .sort((a, b) => b.weight - a.weight)
+                .slice(0, 10);
+            
+            if (prs.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">🏆</div><p>Noch keine PRs. Fang an zu trainieren!</p></div>';
+                return;
+            }
+            
+            container.innerHTML = prs.map(pr => `
+                <div class="pr-item">
+                    <div class="pr-name">${pr.name}</div>
+                    <div class="pr-details">
+                        <span class="pr-weight">${pr.weight}kg</span>
+                        <span>${pr.reps} Wdh. • ${formatDate(pr.date)}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function quickRepeatWorkout() {
+            if (workouts.length === 0) {
+                showNotification('Noch kein Workout gespeichert!', 'error');
+                return;
+            }
+            
+            const lastWorkout = workouts[0];
+            document.getElementById('exerciseName').value = lastWorkout.name;
+            document.getElementById('exerciseType').value = lastWorkout.type;
+            
+            document.getElementById('setsWrapper').innerHTML = '';
+            setCount = 0;
+            lastWorkout.sets.forEach(set => {
+                addSetRow(set.weight, set.reps);
+            });
+            
+            switchView('add', document.querySelectorAll('.nav-btn')[1]);
+            showNotification(`⚡ ${lastWorkout.name} geladen!`);
+        }
+
+        function saveCurrentAsTemplate() {
+            const name = prompt('Template Name:');
+            if (!name) return;
+            
+            const sets = getSetsData();
+            if (sets.length === 0) {
+                showNotification('Bitte Sätze eingeben!', 'error');
+                return;
+            }
+            
+            const exerciseName = document.getElementById('exerciseName').value;
+            const exerciseType = document.getElementById('exerciseType').value;
+            
+            if (!exerciseName) {
+                showNotification('Bitte Übung eingeben!', 'error');
+                return;
+            }
+            
+            templates.push({
+                id: Date.now(),
+                name: name,
+                exercise: exerciseName,
+                type: exerciseType,
+                sets: sets
+            });
+            
+            localStorage.setItem('gymTemplates', JSON.stringify(templates));
+            renderTemplates();
+            showNotification('📋 Template gespeichert!');
+        }
+
+        function renderTemplates() {
+            const container = document.getElementById('templatesContainer');
+            
+            if (templates.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><p>Noch keine Templates. Speichere dein erstes!</p></div>';
+                return;
+            }
+            
+            container.innerHTML = templates.map(t => `
+                <div class="template-item">
+                    <div>
+                        <div class="template-name">${t.name}</div>
+                        <div class="template-info">${t.exercise} • ${t.sets.length} Sätze</div>
+                    </div>
+                    <div class="template-actions">
+                        <button class="template-btn" onclick="loadTemplate(${t.id})">Load</button>
+                        <button class="template-btn" onclick="deleteTemplate(${t.id})" style="background: var(--danger);">Del</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadTemplate(templateId) {
+            const template = templates.find(t => t.id === templateId);
+            if (!template) return;
+            
+            document.getElementById('exerciseName').value = template.exercise;
+            document.getElementById('exerciseType').value = template.type;
+            
+            document.getElementById('setsWrapper').innerHTML = '';
+            setCount = 0;
+            template.sets.forEach(set => {
+                addSetRow(set.weight, set.reps);
+            });
+            
+            switchView('add', document.querySelectorAll('.nav-btn')[1]);
+            showNotification(`📋 ${template.name} geladen!`);
+        }
+
+        function deleteTemplate(templateId) {
+            if (confirm('Template löschen?')) {
+                templates = templates.filter(t => t.id !== templateId);
+                localStorage.setItem('gymTemplates', JSON.stringify(templates));
+                renderTemplates();
+                showNotification('Template gelöscht');
+            }
+        }
+
+        function updateAchievements() {
+            const totalWorkouts = workouts.length;
+            const streak = calculateStreak();
+            const totalVolume = workouts.reduce((sum, w) => {
+                if (w.sets) return sum + w.sets.reduce((s, set) => s + (set.weight * set.reps), 0);
+                return sum;
+            }, 0);
+            
+            if (totalWorkouts >= 1) achievements.first_workout.unlocked = true;
+            if (totalWorkouts >= 10) achievements.ten_workouts.unlocked = true;
+            if (totalWorkouts >= 50) achievements.fifty_workouts.unlocked = true;
+            if (totalWorkouts >= 100) achievements.hundred_workouts.unlocked = true;
+            if (streak >= 10) achievements.ten_day_streak.unlocked = true;
+            if (streak >= 30) achievements.thirty_day_streak.unlocked = true;
+            if (totalVolume >= 1000) achievements.total_volume_1000.unlocked = true;
+            if (totalVolume >= 5000) achievements.total_volume_5000.unlocked = true;
+            
+            localStorage.setItem('gymAchievements', JSON.stringify(achievements));
+            renderAchievements();
+        }
+
+        function renderAchievements() {
+            const container = document.getElementById('achievementsContainer');
+            
+            container.innerHTML = Object.entries(achievements).map(([key, ach]) => `
+                <div class="achievement ${ach.unlocked ? 'unlocked' : ''}" title="${ach.name}">
+                    <div class="achievement-icon">${ach.icon}</div>
+                    <div class="achievement-name">${ach.name}</div>
+                </div>
+            `).join('');
+        }
+
         function updateUI() {
             document.getElementById('totalWorkouts').textContent = workouts.length;
             
@@ -1541,6 +2526,9 @@
             }, 0);
             document.getElementById('totalVolume').textContent = Math.round(totalVolume).toLocaleString('de-DE');
             
+            updateStreakBadge();
+            updatePersonalRecords();
+            updateAchievements();
             renderRecentWorkouts();
         }
 
@@ -2024,7 +3012,10 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            document.getElementById('installPrompt').classList.add('show');
+            const installPrompt = document.getElementById('installPrompt');
+            if (installPrompt) {
+                installPrompt.classList.add('show');
+            }
         });
 
         function installApp() {
@@ -2038,12 +3029,13 @@
         }
 
         function dismissInstall() {
-            document.getElementById('installPrompt').classList.remove('show');
+            const installPrompt = document.getElementById('installPrompt');
+            if (installPrompt) {
+                installPrompt.classList.remove('show');
+            }
         }
 
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('data:text/javascript;base64,Y29uc3QgQ0FDSEVfTkFNRSA9ICdneW0tdHJhY2tlci12Mic7CnNlbGYuYWRkRXZlbnRMaXN0ZW5lcignZmV0Y2gnLCBldmVudCA9PiB7CiAgZXZlbnQucmVzcG9uZFdpdGgoZmV0Y2goZXZlbnQucmVxdWVzdCkpOwp9KTs=');
-        }
+        // ServiceWorker registration removed - data: URLs not supported for PWA
 
         const style = document.createElement('style');
         style.textContent = `
@@ -2055,10 +3047,17 @@
                 from { transform: translateX(-50%) translateY(0); opacity: 1; }
                 to { transform: translateX(-50%) translateY(-20px); opacity: 0; }
             }
+            @keyframes iconFloat {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-5px); }
+            }
         `;
         document.head.appendChild(style);
 
         loadData();
+        loadNewFeatures();
+        renderTemplates();
+        renderAchievements();
     </script>
 </body>
 </html>
