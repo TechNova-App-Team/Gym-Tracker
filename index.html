@@ -748,6 +748,101 @@
         .color-option:nth-child(7) { animation-delay: 0.3s; }
         .color-option:nth-child(8) { animation-delay: 0.35s; }
 
+        /* ===== MODAL STYLES ===== */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(109, 40, 253, 0.08) 100%);
+            border: 2px solid var(--border);
+            border-radius: 24px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+            animation: modalSlideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            backdrop-filter: blur(15px);
+        }
+
+        @keyframes modalSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            padding: 2rem;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, var(--accent), #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 0.5rem;
+        }
+
+        .modal-close:hover {
+            color: var(--accent);
+            transform: scale(1.2) rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .modal-actions button {
+            flex: 1;
+        }
+
         @keyframes colorOptionFade {
             from {
                 opacity: 0;
@@ -1951,8 +2046,56 @@
         <div id="templates" class="view">
             <div class="card">
                 <div class="card-title">📋 Workout Templates</div>
-                <button class="btn btn-primary" onclick="saveCurrentAsTemplate()" style="margin-bottom: 1rem;">+ Template speichern</button>
+                <button class="btn btn-primary" onclick="openTemplateCreator()" style="margin-bottom: 1rem;">+ Neues Template</button>
                 <div id="templatesContainer"></div>
+            </div>
+        </div>
+
+        <!-- Template Creator Modal -->
+        <div id="templateModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>📋 Neues Template erstellen</h2>
+                    <button class="modal-close" onclick="closeTemplateCreator()">✕</button>
+                </div>
+                <div class="modal-body">
+                    <form id="templateForm" onsubmit="createTemplate(event)">
+                        <div class="form-group">
+                            <label>Template Name</label>
+                            <input type="text" id="templateName" placeholder="z.B. Push Day" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Übung</label>
+                            <input type="text" id="templateExercise" list="exerciseList" placeholder="z.B. Bankdrücken" required autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label>Muskelgruppe</label>
+                            <select id="templateType" required>
+                                <option value="">Wählen...</option>
+                                <option value="Brust">Brust</option>
+                                <option value="Rücken">Rücken</option>
+                                <option value="Beine">Beine</option>
+                                <option value="Schultern">Schultern</option>
+                                <option value="Arme">Arme</option>
+                                <option value="Bauch">Bauch</option>
+                                <option value="Cardio">Cardio</option>
+                            </select>
+                        </div>
+                        
+                        <div class="sets-container">
+                            <div class="sets-header">
+                                <h4>Standard Sätze</h4>
+                                <button type="button" class="btn btn-secondary btn-small" onclick="addTemplateSetRow()">+ Satz</button>
+                            </div>
+                            <div id="templateSetsWrapper"></div>
+                        </div>
+
+                        <div class="modal-actions">
+                            <button type="button" class="btn btn-secondary" onclick="closeTemplateCreator()">Abbrechen</button>
+                            <button type="submit" class="btn btn-primary">Template speichern</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -2543,35 +2686,97 @@
             showNotification(`⚡ ${lastWorkout.name} geladen!`);
         }
 
-        function saveCurrentAsTemplate() {
-            const name = prompt('Template Name:');
-            if (!name) return;
-            
-            const sets = getSetsData();
+        let templateSetCount = 0;
+
+        function openTemplateCreator() {
+            document.getElementById('templateModal').style.display = 'flex';
+            document.getElementById('templateSetsWrapper').innerHTML = '';
+            templateSetCount = 0;
+            addTemplateSetRow();
+            addTemplateSetRow();
+            document.getElementById('templateName').focus();
+        }
+
+        function closeTemplateCreator() {
+            document.getElementById('templateModal').style.display = 'none';
+            document.getElementById('templateForm').reset();
+        }
+
+        function addTemplateSetRow(weight = '', reps = '') {
+            templateSetCount++;
+            const wrapper = document.getElementById('templateSetsWrapper');
+            const row = document.createElement('div');
+            row.className = 'set-row';
+            row.dataset.setId = templateSetCount;
+            row.innerHTML = `
+                <div class="set-number">${templateSetCount}</div>
+                <input type="number" placeholder="Gewicht (kg)" min="0" step="0.5" value="${weight}" class="template-set-weight" required>
+                <input type="number" placeholder="Wdh." min="1" value="${reps}" class="template-set-reps" required>
+                <button type="button" class="remove-set-btn" onclick="removeTemplateSetRow(this)" ${templateSetCount === 1 ? 'style="visibility:hidden"' : ''}>×</button>
+            `;
+            wrapper.appendChild(row);
+            updateTemplateSetNumbers();
+        }
+
+        function removeTemplateSetRow(btn) {
+            const rows = document.querySelectorAll('#templateSetsWrapper .set-row');
+            if (rows.length > 1) {
+                btn.parentElement.remove();
+                updateTemplateSetNumbers();
+            }
+        }
+
+        function updateTemplateSetNumbers() {
+            const rows = document.querySelectorAll('#templateSetsWrapper .set-row');
+            rows.forEach((row, index) => {
+                row.querySelector('.set-number').textContent = index + 1;
+                const removeBtn = row.querySelector('.remove-set-btn');
+                removeBtn.style.visibility = rows.length === 1 ? 'hidden' : 'visible';
+            });
+            templateSetCount = rows.length;
+        }
+
+        function getTemplateSetsData() {
+            const sets = [];
+            document.querySelectorAll('#templateSetsWrapper .set-row').forEach((row, index) => {
+                const weight = parseFloat(row.querySelector('.template-set-weight').value);
+                const reps = parseInt(row.querySelector('.template-set-reps').value);
+                if (!isNaN(weight) && !isNaN(reps)) {
+                    sets.push({ setNumber: index + 1, weight, reps });
+                }
+            });
+            return sets;
+        }
+
+        function createTemplate(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('templateName').value;
+            const exercise = document.getElementById('templateExercise').value;
+            const type = document.getElementById('templateType').value;
+            const sets = getTemplateSetsData();
+
             if (sets.length === 0) {
-                showNotification('Bitte Sätze eingeben!', 'error');
+                showNotification('Bitte mindestens einen Satz eingeben!', 'error');
                 return;
             }
-            
-            const exerciseName = document.getElementById('exerciseName').value;
-            const exerciseType = document.getElementById('exerciseType').value;
-            
-            if (!exerciseName) {
-                showNotification('Bitte Übung eingeben!', 'error');
-                return;
-            }
-            
+
             templates.push({
                 id: Date.now(),
                 name: name,
-                exercise: exerciseName,
-                type: exerciseType,
+                exercise: exercise,
+                type: type,
                 sets: sets
             });
-            
+
             localStorage.setItem('gymTemplates', JSON.stringify(templates));
+            closeTemplateCreator();
             renderTemplates();
-            showNotification('📋 Template gespeichert!');
+            showNotification(`📋 Template "${name}" gespeichert!`);
+        }
+
+        function saveCurrentAsTemplate() {
+            openTemplateCreator();
         }
 
         function renderTemplates() {
