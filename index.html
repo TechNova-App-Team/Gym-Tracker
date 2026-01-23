@@ -46,7 +46,7 @@
             color: var(--text-primary);
             min-height: 100vh;
             padding-bottom: 80px;
-            padding-top: 70px;
+            padding-top: 120px;
             transition: background 0.3s, color 0.3s;
         }
 
@@ -1284,12 +1284,23 @@
         /* ===== NEW FEATURES STYLES ===== */
         .quick-actions {
             display: flex;
-            gap: 0.6rem;
+            gap: 0.8rem;
             margin-bottom: 1.5rem;
             animation: quickActionsSlide 0.6s ease;
             overflow-x: auto;
-            padding: 0 0.25rem;
+            padding: 1rem;
             scroll-behavior: smooth;
+            background: rgba(20, 20, 20, 0.5);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-left: -1.5rem;
+            margin-right: -1.5rem;
+            margin-top: 1.5rem;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
         }
 
         .quick-actions::-webkit-scrollbar {
@@ -1301,8 +1312,12 @@
         }
 
         .quick-actions::-webkit-scrollbar-thumb {
-            background: var(--border);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 2px;
+        }
+
+        .quick-actions::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
 
         @keyframes quickActionsSlide {
@@ -1317,23 +1332,24 @@
         }
 
         .quick-action-btn {
-            background: linear-gradient(135deg, var(--accent), #8347ff);
-            border: 2px solid transparent;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 16px;
-            padding: 0.75rem 1.25rem;
+            padding: 1rem 1.4rem;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             text-align: center;
-            color: white;
+            color: var(--text-primary);
             position: relative;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.6rem;
             white-space: nowrap;
             flex-shrink: 0;
-            box-shadow: 0 6px 20px rgba(109, 40, 253, 0.3);
+            box-shadow: 0 8px 25px rgba(109, 40, 253, 0.15);
             font-weight: 600;
         }
 
@@ -1348,9 +1364,10 @@
         }
 
         .quick-action-btn:hover {
-            transform: translateY(-6px) scale(1.08);
-            box-shadow: 0 12px 40px rgba(109, 40, 253, 0.4);
-            background: linear-gradient(135deg, #8347ff, var(--accent));
+            transform: translateY(-8px) scale(1.08);
+            box-shadow: 0 16px 40px rgba(109, 40, 253, 0.3);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.1));
+            border-color: rgba(255, 255, 255, 0.3);
         }
 
         .quick-action-btn:hover::before {
@@ -1358,11 +1375,11 @@
         }
 
         .quick-action-btn:active {
-            transform: translateY(-3px) scale(1.05);
+            transform: translateY(-4px) scale(1.05);
         }
 
         .quick-action-icon {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             transition: transform 0.3s;
         }
 
@@ -1372,13 +1389,13 @@
 
         @keyframes iconBounceQuick {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.15); }
+            50% { transform: scale(1.2); }
         }
 
         .quick-action-label {
-            font-size: 0.7rem;
+            font-size: 0.8rem;
             font-weight: 700;
-            color: white;
+            color: var(--text-primary);
             letter-spacing: 0.5px;
         }
 
@@ -1594,36 +1611,39 @@
             font-weight: 700;
         }
 
-        /* ===== APPLE-STYLE TOP NAVBAR ===== */
+        /* ===== APPLE-STYLE GLASSED NAVBAR ===== */
         .top-navbar {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(180deg, rgba(26, 26, 26, 0.98) 0%, rgba(26, 26, 26, 0.95) 100%);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
+            background: rgba(20, 20, 20, 0.7);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
             z-index: 200;
-            padding: 0.8rem 1rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
         }
 
         .navbar-content {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 2rem;
         }
 
         .navbar-title {
-            font-size: 1.25rem;
+            font-size: 1.3rem;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--accent), #a855f7);
+            background: linear-gradient(135deg, var(--accent), #a855f7, #8b5cf6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             animation: titleGlow 3s ease-in-out infinite;
+            white-space: nowrap;
         }
 
         @keyframes titleGlow {
@@ -1631,11 +1651,92 @@
             50% { filter: drop-shadow(0 0 15px rgba(109, 40, 253, 0.5)); }
         }
 
+        .navbar-buttons {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            flex: 1;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .navbar-btn {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .navbar-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .navbar-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.1));
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 25px rgba(109, 40, 253, 0.25);
+            transform: translateY(-3px);
+        }
+
+        .navbar-btn:hover::before {
+            opacity: 1;
+        }
+
+        .navbar-btn:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        .navbar-btn.active {
+            background: linear-gradient(135deg, rgba(109, 40, 253, 0.4), rgba(109, 40, 253, 0.15));
+            border-color: var(--accent);
+            box-shadow: 0 8px 32px rgba(109, 40, 253, 0.35);
+            color: var(--accent);
+        }
+
+        .navbar-btn-icon {
+            font-size: 1.1rem;
+            transition: transform 0.3s;
+        }
+
+        .navbar-btn:hover .navbar-btn-icon {
+            animation: iconFloat 0.5s ease;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        .navbar-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
         .theme-toggle-navbar {
-            background: linear-gradient(135deg, var(--bg-tertiary), rgba(109, 40, 253, 0.1));
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 0.5rem 0.7rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 0.6rem 0.8rem;
             cursor: pointer;
             font-size: 1.1rem;
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -1644,18 +1745,69 @@
         }
 
         .theme-toggle-navbar:hover {
-            border-color: var(--accent);
-            transform: scale(1.1);
-            box-shadow: 0 6px 15px rgba(109, 40, 253, 0.2);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.1));
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1) translateY(-2px);
+            box-shadow: 0 8px 25px rgba(109, 40, 253, 0.25);
+        }
+
+        .theme-toggle-navbar:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 768px) {
+            .navbar-content {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .navbar-title {
+                width: 100%;
+                text-align: center;
+            }
+
+            .navbar-buttons {
+                width: 100%;
+                order: 3;
+            }
+
+            .navbar-actions {
+                order: 2;
+            }
+
+            .navbar-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Apple-Style Top Navbar -->
+    <!-- Apple-Style Glassed Navbar -->
     <div class="top-navbar">
         <div class="navbar-content">
             <div class="navbar-title">💪 Gym Tracker</div>
-            <button class="theme-toggle-navbar" onclick="toggleTheme()" title="Theme wechseln">🌙</button>
+            <div class="navbar-buttons">
+                <button class="navbar-btn" onclick="quickRepeatWorkout()" title="Quick Repeat">
+                    <span class="navbar-btn-icon">⚡</span>
+                    <span>Quick Repeat</span>
+                </button>
+                <button class="navbar-btn" onclick="switchView('prview', this)" title="Persönliche Rekorde">
+                    <span class="navbar-btn-icon">🏆</span>
+                    <span>My PRs</span>
+                </button>
+                <button class="navbar-btn" onclick="switchView('templates', this)" title="Workout Templates">
+                    <span class="navbar-btn-icon">📋</span>
+                    <span>Templates</span>
+                </button>
+                <button class="navbar-btn" onclick="switchView('achievements', this)" title="Erfolge">
+                    <span class="navbar-btn-icon">🎖️</span>
+                    <span>Achievements</span>
+                </button>
+            </div>
+            <div class="navbar-actions">
+                <button class="theme-toggle-navbar" onclick="toggleTheme()" title="Theme wechseln">🌙</button>
+            </div>
         </div>
     </div>
 
@@ -1682,25 +1834,6 @@
     </div>
 
     <div class="container" style="padding-top: 0;">
-        <!-- Quick Actions Bar -->
-        <div class="quick-actions" style="margin-top: 1rem;">
-            <button class="quick-action-btn" onclick="quickRepeatWorkout()" title="Letztes Workout wiederholen">
-                <div class="quick-action-icon">⚡</div>
-                <div class="quick-action-label">Quick Repeat</div>
-            </button>
-            <button class="quick-action-btn" onclick="switchView('prview', null)" title="Persönliche Rekorde">
-                <div class="quick-action-icon">🏆</div>
-                <div class="quick-action-label">My PRs</div>
-            </button>
-            <button class="quick-action-btn" onclick="switchView('templates', null)" title="Workout Vorlagen">
-                <div class="quick-action-icon">📋</div>
-                <div class="quick-action-label">Templates</div>
-            </button>
-            <button class="quick-action-btn" onclick="switchView('achievements', null)" title="Erfolge">
-                <div class="quick-action-icon">🎖️</div>
-                <div class="quick-action-label">Achievements</div>
-            </button>
-        </div>
         <!-- Home View -->
         <div id="homeView" class="view active">
             <!-- Streak Badge -->
@@ -2119,7 +2252,12 @@
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             
-            const viewEl = document.getElementById(view + 'View');
+            // Handle both formats: 'home' -> 'homeView' and 'prview' -> 'prview'
+            let viewEl = document.getElementById(view + 'View');
+            if (!viewEl) {
+                viewEl = document.getElementById(view);
+            }
+            
             if (viewEl) {
                 viewEl.classList.add('active');
             }
@@ -2133,9 +2271,18 @@
                 updateExerciseFilter();
             }
             if (view === 'add') updateExerciseDatalist();
-            if (view === 'prview') renderPRs();
-            if (view === 'templates') renderTemplates();
-            if (view === 'achievements') renderAchievements();
+            if (view === 'prview') {
+                updatePersonalRecords();
+                renderPRs();
+            }
+            if (view === 'templates') {
+                loadNewFeatures();
+                renderTemplates();
+            }
+            if (view === 'achievements') {
+                updateAchievements();
+                renderAchievements();
+            }
         }
 
         // ==================== Sets Management ====================
@@ -3058,6 +3205,17 @@
         loadNewFeatures();
         renderTemplates();
         renderAchievements();
+
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(registration => {
+                    console.log('[PWA] Service Worker registered:', registration);
+                })
+                .catch(error => {
+                    console.warn('[PWA] Service Worker registration failed:', error);
+                });
+        }
     </script>
 </body>
 </html>
